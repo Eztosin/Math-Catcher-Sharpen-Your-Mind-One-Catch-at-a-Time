@@ -42,6 +42,8 @@ Math Catcher is an engaging educational game designed to make learning math fun 
 - **Responsive Design**: Play on desktop or mobile devices.
 - **Visual Feedback**: Animations for correct and incorrect catches.
 - **Timer**: Race against the clock to solve as many problems as possible.
+- **User Authentication**: Login system to track individual player progress and scores.
+- **Logout Functionality**: Easily switch between different user accounts.
 
 ## 🎯 Difficulty Levels
 
@@ -82,10 +84,12 @@ As you advance through levels:
 ## 🚀 Getting Started
 
 1. Open the game in your web browser
-2. Click "Start Game" on the welcome screen
-3. Choose your difficulty level
+2. Log in with your username and password (or play as a guest)
+3. Choose your difficulty level on the welcome screen
 4. Toggle sound on/off according to your preference
-5. Use the controls to move the bowl and catch correct answers
+5. Click "Start Game" to begin playing
+6. Use the controls to move the bowl and catch correct answers
+7. Use the "Logout" button when you want to switch users
 
 ## 🧠 Educational Benefits
 

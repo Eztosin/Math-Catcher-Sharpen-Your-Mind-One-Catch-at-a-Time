@@ -294,6 +294,12 @@ const Game = {
       this.startGame();
     });
 
+    // Logout button
+    document.getElementById("logout-button").addEventListener("click", () => {
+      localStorage.removeItem("user");
+      window.location.href = "login.html";
+    });
+
     // Restart button
     document.getElementById("restart-button").addEventListener("click", () => {
       document.getElementById("game-over").style.display = "none";
