@@ -2,6 +2,10 @@
 
 ![Math Catcher Game](cloud.png)
 
+## 🎲 Play the Game
+
+Try the live demo: [Math Catcher Game](https://eztosin.github.io/Math-Catcher-Sharpen-Your-Mind-One-Catch-at-a-Time/)
+
 ## 📚 About the Game
 
 Math Catcher is an engaging educational game designed to make learning math fun and interactive. Players control a bowl to catch falling apples that contain the correct answers to math problems. The game combines quick thinking, mental math skills, and hand-eye coordination to create an entertaining learning experience for players of all ages.
