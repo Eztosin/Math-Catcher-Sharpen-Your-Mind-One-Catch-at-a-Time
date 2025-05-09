@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Catcher Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f8ff;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 24px;
+        }
+
+        #question {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .game-ui {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        #user-info {
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        #exit-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #exit-button:hover {
+            background-color: #c0392b;
+        }
+
+        #score,
+        #level,
+        #timer {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 5px 10px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #timer.low-time {
+            background-color: rgba(255, 100, 100, 0.7);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4/3;
+            border: 2px solid #2c3e50;
+            background-color: #cce7ff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: block;
+        }
+
+        #instructions {
+            margin-top: 10px;
+            text-align: center;
+            color: #34495e;
+            font-size: 14px;
+        }
+
+        .controls {
+            display: none;
+            width: 100%;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            user-select: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #game-over,
+        #start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 10;
+        }
+
+        #game-over {
+            display: none;
+        }
+
+        .screen-content {
+            background-color: rgba(44, 62, 80, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .high-scores {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .high-scores table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .high-scores th,
+        .high-scores td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .settings {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .settings label {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            color: #ecf0f1;
+        }
+
+                .settings select, 
+        .settings input[type="checkbox"] {
+            background-color: #34495e;
+            color: white;
+            border: 1px solid #7f8c8d;
+            padding: 5px;
+            border-radius: 4px;
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            accent-color: #3498db;
+            margin-left: 5px;
+        }
+
+        .settings select {
+            width: 120px;
+        }
+
+        .settings label {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            color: #ecf0f1;
+        }
+
+        .settings input[type="checkbox"] {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            background-color: #34495e;
+            color: white;
+            border: 1px solid #7f8c8d;
+            padding: 5px;
+            border-radius: 4px;
+            margin-left: 5px;
+            accent-color: #3498db;
+        }
+
+
+
+
+        /* Media query for mobile devices */
+        @media (max-width: 500px) {
+            .controls {
+                display: flex;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            #question {
+                font-size: 18px;
+            }
+
+            #score,
+            #level,
+            #timer {
+                font-size: 14px;
+                padding: 4px 8px;
+            }
+
+            .screen-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <h1 class="text-center">Math Catcher</h1>
+
+        <div class="game-header">
+            <div id="user-info">Logged in as: Guest</div>
+            <button id="exit-button">Exit Game</button>
+        </div>
+
+        <div id="question">Solve: 5 + 3</div>
+
+        <div class="game-ui">
+            <div id="score">Score: 0</div>
+            <div id="level">Level: 1</div>
+            <div id="timer">1:00</div>
+        </div>
+
+        <canvas id="gameCanvas" width="500" height="375"></canvas>
+
+        <div class="controls">
+            <div class="control-btn" id="leftBtn">←</div>
+            <div class="control-btn" id="rightBtn">→</div>
+        </div>
+
+        <div id="instructions">
+            <p>Catch the apples with the correct answer to the math problem!</p>
+            <p>Use left and right arrow keys to move the bowl.</p>
+        </div>
+    </div>
+
+    <div id="start-screen">
+        <div class="screen-content">
+            <h2>Math Catcher</h2>
+            <p>Catch the apples with the correct answers to solve math problems!</p>
+
+            <div class="settings">
+                <label>
+                    <input type="checkbox" id="sound-toggle" checked>
+                    <span>Enable Sound</span>
+                </label>
+                <label>
+                    <span>Difficulty:</span>
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
+            </div>
+            
+
+            <button id="start-button">Start Game</button>
+
+            <div class="high-scores">
+                <h3>High Scores</h3>
+                <table id="high-scores-table">
+                    <tr>
+                        <th>Rank</th>
+                        <th>Score</th>
+                        <th>Level</th>
+                    </tr>
+                    <tr>
+                        <td colspan="3">No scores yet</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-over">
+        <div class="screen-content">
+            <h2>Game Over</h2>
+            <p id="final-score">Your Score: 0</p>
+            <p id="final-level">Level Reached: 1</p>
+            <button id="restart-button">Play Again</button>
+        </div>
+    </div>
+
+    <!-- Audio elements -->
+    <audio id="correct-sound" src="https://assets.mixkit.co/active_storage/sfx/2005/2005-preview.mp3"
+        preload="auto"></audio>
+    <audio id="wrong-sound" src="https://assets.mixkit.co/active_storage/sfx/2007/2007-preview.mp3"
+        preload="auto"></audio>
+    <audio id="level-up-sound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
+        preload="auto"></audio>
+    <audio id="game-over-sound" src="https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3"
+        preload="auto"></audio>
+
+    <script src="enhanced-game.js"></script>
+</body>
+
+</html>
